@@ -24,8 +24,8 @@ namespace ZRada.Data
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                    "Server=tcp:95.67.19.2,42424;Initial Catalog=Jazzoilique;Persist Security Info=False;User ID=sa;Password=ZZzz1234;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;",
-                    sqlServerOptionsAction: options => { options.EnableRetryOnFailure(); });
+                    "Server=tcp:95.67.19.2,42424;Initial Catalog=Jazzoilique;Persist Security Info=False;User ID=sa;Password=ZZzz1234;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=300;",
+                    sqlServerOptionsAction: options => { options.EnableRetryOnFailure(); options.CommandTimeout(6000); });
 
                 // optionsBuilder.UseSqlServer("Server=tcp:95.67.19.2,42424;Initial Catalog=JazzoilSalesDebug;Persist Security Info=False;User ID=sa;Password=ZZzz1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
             }
@@ -39,8 +39,11 @@ namespace ZRada.Data
                 {
                     entity.HasIndex(e => new { e.Name})
                     .HasName("IX_UniqueRecord")
-                    .IsUnique();
+                    .IsUnique();                    
                 });
+
+            builder.Entity<Vote>()
+            .HasIndex(b => b.Value);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);

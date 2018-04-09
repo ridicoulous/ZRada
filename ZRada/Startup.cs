@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ZRada.Data;
 using ZRada.Models;
 using ZRada.Services;
+using ReflectionIT.Mvc.Paging;
 
 namespace ZRada
 {
@@ -27,16 +28,17 @@ namespace ZRada
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlServerOptions => sqlServerOptions.CommandTimeout(600)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
+         //   services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+            services.AddPaging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

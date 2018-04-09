@@ -1,0 +1,7 @@
+﻿@model ComponentInvoker
+@{
+    ViewData["Title"] = "Invoke";
+}
+
+
+@await Component.InvokeAsync(Model.Name)

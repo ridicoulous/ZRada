@@ -1,0 +1,68 @@
+﻿<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('input[name="datefilter"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Очистить',
+                applyLabel: 'Применить',
+                format: 'DD-MM-YYYY',
+                customRangeLabel: 'Выбрать промежуток'
+            },
+            ranges: {
+                'Сегодня': [moment(), moment().subtract(-1, 'days')],
+                'Вчера': [moment().subtract(1, 'days'), moment().subtract(0, 'days')],
+                'Последние 7 дней': [moment().subtract(6, 'days'), moment()],
+                'Последние 30 дней': [moment().subtract(29, 'days'), moment()],
+                'Этот месяц': [moment().startOf('month'), moment().endOf('month').subtract(-1, 'days')],
+                'Прошлый месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').subtract(-1, 'days')]
+            }
+        });
+
+        $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+            $('#from').val(picker.startDate.format('DD-MM-YYYY'));
+            $('#to').val(picker.endDate.format('DD-MM-YYYY'));
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+        });
+
+        $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+    });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+
+    //$(function () {
+
+    //    var start = moment().subtract(29, 'days');
+    //    var end = moment();
+
+    //    function cb(start, end) {
+    //        $('#reportrange span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+    //    }
+
+    //    $('#reportrange').daterangepicker({
+    //        startDate: start,
+    //        endDate: end,
+    //        ranges: {
+    //            'Сегодня': [moment(), moment().subtract(-1, 'days')],
+    //            'Вчера': [moment().subtract(1, 'days'), moment().subtract(0, 'days')],
+    //            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    //            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    //            'This Month': [moment().startOf('month'), moment().endOf('month')],
+    //            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //        }
+    //    }, cb);
+
+    //    cb(start, end);
+
+    //});
+
+
+</script>

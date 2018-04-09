@@ -8,6 +8,7 @@ using AngleSharp.Parser.Html;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,13 +24,17 @@ namespace ParserTest
 
         static void Main(string[] args)
         {
-            for (int i = 1; i < 17700; i++)
+            using (var db = new ApplicationDbContext())
             {
-
-                ParsePage(i);
-              //  new Thread(() => { ParsePage(i); }).Start();
+                var votings = db.Votings.Where(c => c.Date.Hour > 18 || c.Date.Hour < 8).Count();
+                //foreach (var t in votings)
+                //    Console.WriteLine(t.Date);
+                Console.WriteLine(votings);
             }
+
+            Console.ReadLine();
         }
+
         private static List<List<T>> CustomSplit<T>(List<T> source)
         {
             return source
@@ -57,16 +62,16 @@ namespace ParserTest
                     var res = header.TextContent;
                     using (var db = new ApplicationDbContext())
                     {
-                        var voting = new Voting() { Name = res, Number=id };
+                        var voting = new Voting() { Name = res, Number = id };
                         db.Votings.Add(voting);
                         db.SaveChanges();
 
                         var emphasize = doc.QuerySelectorAll("div.dep, div.golos").ToList();
                         var t = CustomSplit(emphasize);
                         List<Deps> list = t.Take(t.Count / 2).Select(c => new Deps(c[0].Text(), c[1].Text())).ToList();
-                        foreach(var vote in list)
+                        foreach (var vote in list)
                         {
-                            db.Votes.Add(new Vote(voting.Id,GetDeputatId(vote.Name,db),vote.Vote));
+                            db.Votes.Add(new Vote(voting.Id, GetDeputatId(vote.Name, db), vote.Vote));
                         }
                         db.SaveChanges();
                     }
@@ -87,7 +92,7 @@ namespace ParserTest
             public string Name { get; set; }
             public string Vote { get; set; }
         }
-        
+
         private static string GetDeputatId(string deputat, ApplicationDbContext db)
         {
             string id = db.Deputats.FirstOrDefault(c => c.Name == deputat)?.Id;

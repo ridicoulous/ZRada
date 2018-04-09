@@ -1,0 +1,8 @@
+﻿@model List<DateTime>
+
+@foreach (var day in Model)
+{
+    <br />
+    @Html.ActionLink(day.ToString("dd.MM.yyyy"), "Index", "Votings", new { from = day.ToString("dd-MM-yyyy"), to = day.AddDays(1).ToString("dd-MM-yyyy") })
+
+}

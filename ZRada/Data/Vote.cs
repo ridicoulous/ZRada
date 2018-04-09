@@ -14,6 +14,7 @@ namespace ZRada.Data
             VotingId = votingId;
             Value = value;
         }
+        
         public string Value { get; set; }
         public string DeputatId { get; set; }
         public virtual Deputat Deputat { get; set; }

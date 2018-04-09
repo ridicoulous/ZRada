@@ -1,0 +1,87 @@
+﻿@model PagingList<ZRada.Data.Voting>
+
+@{
+    ViewData["Title"] = "Список голосований";
+}
+
+<h2>Список голосований</h2>
+
+<nav aria-label="Suppliers navigation example">
+    <form asp-action="Index" asp-controller="Votings" method="get" class="form-inline">
+        @*<div class="form-group">
+            @Html.DropDownList("Id", (SelectList)ViewBag.Id, htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownList("Fs", (SelectList)ViewBag.Fs, htmlAttributes: new { @class = "form-control" })
+        </div>*@
+        <div class="form-group">
+            <input type="text" name="datefilter" value="@ViewBag.From - @ViewBag.To" class="form-control" placeholder="Выберите временной промежуток" />
+        </div>
+
+        <div class="form-group">
+            <input type="number" name="hourFrom" step="1" min="0" max="23" class="form-control" value="@ViewBag.HourFrom" placeholder="с часов" />
+        </div>
+        <div class="form-group">
+            <input type="number" name="hourTo" step="1" min="0" max="23" class="form-control" value="@ViewBag.HourTo" placeholder="по часов" />
+        </div>
+
+
+            <div class="form-group">
+                @Html.DropDownList("Day", (SelectList)ViewBag.Day, htmlAttributes: new { @class = "form-control" })
+            </div>
+
+        @*<div class="form-group">
+            <input type="checkbox" name="isAccepted"/>
+        </div>*@
+
+        <input type="submit" value="Отфильтровать" class="btn btn-default" />
+        <input type="hidden" id="from" name="from" value="@ViewBag.From" />
+        <input type="hidden" id="to" name="to" value="@ViewBag.To" />
+
+    </form>
+    <vc:pager paging-list="@Model" />
+    <p> Всего @ViewBag.Count результатов </p>
+</nav>
+<div class="table table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Result?"success":"danger")">
+                    <td>
+                        <a href="http://w1.c1.rada.gov.ua/pls/radan_gs09/ns_golos?g_id=@item.Number" target="_blank">@item.Date.ToString("dd.MM.yyyy HH:mm")</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<nav aria-label="Suppliers navigation example">
+    <vc:pager paging-list="@Model" />
+    <p> Всего @ViewBag.Count результатов </p>
+
+</nav>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DatePickerPartial");}
+}
