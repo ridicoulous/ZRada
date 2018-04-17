@@ -26,10 +26,10 @@ namespace ParserTest
         {
             using (var db = new ApplicationDbContext())
             {
-                var votings = db.Votings.Where(c => c.Date.Hour > 18 || c.Date.Hour < 8).Count();
-                //foreach (var t in votings)
-                //    Console.WriteLine(t.Date);
-                Console.WriteLine(votings);
+                var votings = db.Votes.GroupBy(c => c.Date.Date).OrderByDescending(c => c.Count()).Take(10);
+               foreach (var t in votings)
+                    Console.WriteLine($"{t.Key} - {t.Count()}");
+             
             }
 
             Console.ReadLine();

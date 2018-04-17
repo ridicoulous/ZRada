@@ -154,6 +154,8 @@ namespace ZRada.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<string>("DeputatId");
 
                     b.Property<string>("Value");
@@ -164,9 +166,9 @@ namespace ZRada.Data.Migrations
 
                     b.HasIndex("DeputatId");
 
-                    b.HasIndex("Value");
-
                     b.HasIndex("VotingId");
+
+                    b.HasIndex("Value", "Date");
 
                     b.ToTable("Votes");
                 });

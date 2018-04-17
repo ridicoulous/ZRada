@@ -20,7 +20,7 @@ namespace ZRada.Data
         public virtual Deputat Deputat { get; set; }
         public string VotingId { get; set; }
         public virtual Voting Voting { get; set; }
-
+        public DateTime Date { get; set; }
        
     }
 }
