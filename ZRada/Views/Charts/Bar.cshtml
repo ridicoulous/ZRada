@@ -1,0 +1,56 @@
+﻿@model ChartWrapper
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "BarChart";
+}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<div id="chart"></div>
+
+<script type="text/javascript">
+            google.charts.load('current', { 'packages': ['corechart', 'bar'] });
+
+            google.charts.setOnLoadCallback(function () {
+                var title = '@Model.Title';
+                var subtitle = '@Model.Subtitle';
+                var options = {
+
+                    theme: 'material',
+                    legend: {
+                        position: 'bottom',
+                        alignment: 'start'
+                    },
+                    height: 500
+
+                };
+                var dataTable = new google.visualization.DataTable(
+                  @Html.Raw(JsonConvert.SerializeObject(Model.DataTable))
+                );
+
+                drawBarChart('chart', title, subtitle, dataTable, options);
+           //    drawBubbleChart('chart1', title, dataTable);
+            });
+
+            function drawBarChart(elementId, title, subtitle, dataTable, options) {
+
+                var chart = new google.charts.Bar(document.getElementById(elementId));
+                chart.draw(dataTable, options);
+            }
+
+            function drawColumnChart(elementId, title, subtitle, dataTable, options) {
+                var options = {
+                    title: title
+                };
+                var chart = new google.visualization.ColumnChart(document.getElementById(elementId));
+                chart.draw(dataTable, options);
+            }
+            function drawBubbleChart(elementId, title, dataTable) {
+                var options = {
+                    title: title
+                };
+                var chart = new google.visualization.PieChart(document.getElementById(elementId));
+                chart.draw(dataTable, options);
+            }
+</script>
